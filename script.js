@@ -25,7 +25,7 @@ canvas.addEventListener('click', e => {
 canvas.addEventListener('mousemove', e => {
 	mouse.x = e.x;
 	mouse.y = e.y;
-	for (let i = 0; i < 3; i++) {
+	for (let i = 0; i < 1; i++) {
 		particlesArray.push(new Particle());
 	}
 });
@@ -56,20 +56,39 @@ function handleParticles() {
 	for (let i = 0; i < particlesArray.length; i++) {
 		particlesArray[i].update();
 		particlesArray[i].draw();
+
+		for (let j = i; j < particlesArray.length; j++) {
+			//getting distance between two particles on two plains
+			const dx = particlesArray[i].x - particlesArray[j].x;
+			const dy = particlesArray[i].y - particlesArray[j].y;
+			//finding out the 2d distance with pithagoras theorem
+			//sqrt of pow(x)+pow(y)
+			const dist = Math.sqrt(dx * dx + dy * dy); //it's the first time I loved math so much ❤
+
+			if (dist < 100) {
+				ctx.beginPath();
+				ctx.strokeStyle = particlesArray[i].color;
+				ctx.lineWidth = 0.2;
+				ctx.moveTo(particlesArray[i].x, particlesArray[i].y);
+				ctx.lineTo(particlesArray[j].x, particlesArray[j].y);
+				ctx.stroke();
+				ctx.closePath();
+			}
+		}
+
+		//delete particles when too small
 		if (particlesArray[i].size <= 0.3) {
 			particlesArray.splice(i, 1);
-
 			i--;
 		}
 	}
 }
 function animate() {
-	// ctx.clearRect(0, 0, canvas.width, canvas.height);
-	ctx.fillStyle = `rgba(0,0,0,0.02)`;
-	ctx.fillRect(0, 0, canvas.width, canvas.height);
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	// ctx.fillStyle = `black`;
+	// ctx.fillRect(0, 0, canvas.width, canvas.height);
 	handleParticles();
 	hue += 0.5;
 	requestAnimationFrame(animate);
 }
 animate();
-console.log({ particlesArray });
