@@ -6,3 +6,5 @@
 
 ### Branch `particle-trail`
 ![Constellation Effect](assets/constlation-on-mousemove.gif)
+### Branch `button-animations`
+![Constellation Effect](assets/button-animation.gif)
