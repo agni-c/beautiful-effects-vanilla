@@ -1,115 +1,72 @@
-/** @type {HTMLCanvasElement} */
-const canvas = document.getElementById('canvas1');
+const liquidBtn = document.querySelector('.liquid');
+const distortBtn = document.querySelector('.distort');
+const haywareBtn = document.querySelector('.hayware');
+const turbulence = document.querySelector('feTurbulence');
+let verticalFrequency = 0.01;
+let horizontalFrequency = 0.1;
+const steps = 60;
+const interval = 10;
+turbulence.setAttribute(
+	'baseFrequency',
+	`${verticalFrequency} ${horizontalFrequency}`
+);
 
-/** @type {CanvasRenderingContext2D} */
-const ctx = canvas.getContext('2d');
-
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-const particlesArray = [];
-
-window.addEventListener('resize', () => {
-	canvas.width = window.innerWidth;
-	canvas.height = window.innerHeight;
+liquidBtn.addEventListener('mouseover', e => {
+	console.log('hello');
+	verticalFrequency = 0.1;
+	horizontalFrequency = 0.1;
+	animatePerlNoise(
+		verticalFrequency,
+		horizontalFrequency,
+		0.002,
+		0.002,
+		steps,
+		interval
+	);
 });
 
-class Particle {
-	constructor() {
-		this.x = Math.random() * canvas.width;
-		this.y = Math.random() * canvas.height;
-		this.size = Math.random() * 15 + 1; // 1 -> 16
-		this.speedX = Math.random() * 3 - 1.5; // +1.5 -> -1.5
-		this.speedY = Math.random() * 3 - 1.5; // +1.5 -> -1.5
+distortBtn.addEventListener('mouseover', e => {
+	animatePerlNoise(
+		verticalFrequency,
+		horizontalFrequency,
+		0.0,
+		0.015,
+		steps,
+		interval
+	);
+});
+
+haywareBtn.addEventListener('mouseover', e => {
+	animatePerlNoise(
+		verticalFrequency,
+		horizontalFrequency,
+		0.3,
+		0.0,
+		steps,
+		interval
+	);
+});
+
+/**
+ *
+ * @param {number} vfq  Base vertical Frequency
+ * @param {number} hfq  Base horizontal Frequency
+ * @param {number} vfqInc vertical feq increase
+ * @param {number} hfqInc horizontal feq increase
+ * @param {number} steps animation steps
+ * @param {number} interval time interval in milliseconds
+ */
+function animatePerlNoise(vfq, hfq, vfqInc, hfqInc, steps, interval) {
+	for (i = 0; i < steps; i++) {
+		setTimeout(() => {
+			vfq += vfqInc;
+			hfq += hfqInc;
+			turbulence.setAttribute('baseFrequency', `${vfq} ${hfq}`);
+		}, i * interval);
 	}
-	update() {
-		this.x += this.speedX;
-		this.y += this.speedY;
-		if (this.size > 0.2) this.size -= 0.1;
-	}
-	draw() {
-		ctx.fillStyle = 'red';
-		ctx.beginPath();
-		ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-		ctx.fill();
-	}
+	setTimeout(() => {
+		vfq = 0;
+		hfq = 0;
+		turbulence.setAttribute('baseFrequency', `${vfq} ${hfq}`);
+	}, steps * interval);
 }
-function init() {
-	for (let i = 0; i < 100; i++) {
-		particlesArray.push(new Particle());
-	}
-	animate();
-}
-function handleParticles() {
-	for (let i = 0; i < particlesArray.length; i++) {
-		particlesArray[i].update();
-		particlesArray[i].draw();
-		if (particlesArray[i].size <= 0.3) {
-			particlesArray.splice(i, 1);
-
-			i--;
-		}
-	}
-}
-function animate() {
-	/** @type {HTMLCanvasElement} */
-	const canvas = document.getElementById('canvas1');
-
-	/** @type {CanvasRenderingContext2D} */
-	const ctx = canvas.getContext('2d');
-
-	canvas.width = window.innerWidth;
-	canvas.height = window.innerHeight;
-	const particlesArray = [];
-
-	window.addEventListener('resize', () => {
-		canvas.width = window.innerWidth;
-		canvas.height = window.innerHeight;
-	});
-
-	class Particle {
-		constructor() {
-			this.x = Math.random() * canvas.width;
-			this.y = Math.random() * canvas.height;
-			this.size = Math.random() * 5 + 1; // 1 -> 6
-			this.speedX = Math.random() * 3 - 1.5; // +1.5 -> -1.5
-			this.speedY = Math.random() * 3 - 1.5; // +1.5 -> -1.5
-		}
-		update() {
-			this.x += this.speedX;
-			this.y += this.speedY;
-		}
-		draw() {
-			ctx.fillStyle = 'pink';
-			ctx.beginPath();
-			ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-			ctx.fill();
-		}
-	}
-	function init() {
-		for (let i = 0; i < 100; i++) {
-			particlesArray.push(new Particle());
-		}
-		animate();
-	}
-	function handleParticles() {
-		for (let i = 0; i < particlesArray.length; i++) {
-			particlesArray[i].update();
-			particlesArray[i].draw();
-		}
-	}
-	function animate() {
-		ctx.clearRect(0, 0, canvas.width, canvas.height);
-		handleParticles();
-		requestAnimationFrame(animate);
-	}
-	init();
-
-	console.log({ particlesArray });
-
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	handleParticles();
-	requestAnimationFrame(animate);
-}
-init();
-
-console.log({ particlesArray });

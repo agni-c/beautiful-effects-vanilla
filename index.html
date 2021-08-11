@@ -4,11 +4,40 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Poppins&display=swap"
+			rel="stylesheet"
+		/>
 		<title>Static Template</title>
 		<link rel="stylesheet" href="style.css" />
 		<script defer src="script.js"></script>
 	</head>
 	<body>
-		<canvas id="canvas1"></canvas>
+		<div class="container">
+			<button class="liquid">liquid</button>
+			<button class="distort">distort</button>
+			<button class="hayware">hayware</button>
+		</div>
+		<svg>
+			<defs>
+				<filter id="wave">
+					<feTurbulence
+						type="fractalNoise"
+						baseFrequency="0.05 0.5"
+						numOctaves="1"
+						result="wrap"
+					/>
+					<feDisplacementMap
+						in2="wrapOffset"
+						in="SourceGraphic"
+						scale="50"
+						xChannelSelector="R"
+						yChannelSelector="G"
+					/>
+				</filter>
+			</defs>
+		</svg>
 	</body>
 </html>
