@@ -22,7 +22,7 @@ function animate() {
 }
 
 function drawFlower() {
-	let angle = number * 2;
+	let angle = number * 1;
 	let radius = scale * Math.sqrt(number);
 	let size = 02;
 	let posY = radius * Math.cos(angle) + canvas.height / 2;
