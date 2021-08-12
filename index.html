@@ -15,29 +15,6 @@
 		<script defer src="script.js"></script>
 	</head>
 	<body>
-		<div class="container">
-			<button class="liquid">liquid</button>
-			<button class="distort">distort</button>
-			<button class="hayware">hayware</button>
-		</div>
-		<svg>
-			<defs>
-				<filter id="wave">
-					<feTurbulence
-						type="fractalNoise"
-						baseFrequency="0.05 0.5"
-						numOctaves="1"
-						result="wrap"
-					/>
-					<feDisplacementMap
-						in2="wrapOffset"
-						in="SourceGraphic"
-						scale="50"
-						xChannelSelector="R"
-						yChannelSelector="G"
-					/>
-				</filter>
-			</defs>
-		</svg>
+		<canvas id="fibb-canvas"></canvas>
 	</body>
 </html>

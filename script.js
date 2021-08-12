@@ -1,72 +1,41 @@
-const liquidBtn = document.querySelector('.liquid');
-const distortBtn = document.querySelector('.distort');
-const haywareBtn = document.querySelector('.hayware');
-const turbulence = document.querySelector('feTurbulence');
-let verticalFrequency = 0.01;
-let horizontalFrequency = 0.1;
-const steps = 60;
-const interval = 10;
-turbulence.setAttribute(
-	'baseFrequency',
-	`${verticalFrequency} ${horizontalFrequency}`
-);
+/** @type{HTMLCanvasElement} */
+const canvas = document.getElementById('fibb-canvas');
+const ctx = canvas.getContext('2d');
 
-liquidBtn.addEventListener('mouseover', e => {
-	console.log('hello');
-	verticalFrequency = 0.1;
-	horizontalFrequency = 0.1;
-	animatePerlNoise(
-		verticalFrequency,
-		horizontalFrequency,
-		0.002,
-		0.002,
-		steps,
-		interval
-	);
+//canvas fullscreen
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+window.addEventListener('resize', () => {
+	canvas.width = window.innerWidth;
+	canvas.height = window.innerHeight;
 });
 
-distortBtn.addEventListener('mouseover', e => {
-	animatePerlNoise(
-		verticalFrequency,
-		horizontalFrequency,
-		0.0,
-		0.015,
-		steps,
-		interval
-	);
-});
+let scale = 10;
+let number = 0;
 
-haywareBtn.addEventListener('mouseover', e => {
-	animatePerlNoise(
-		verticalFrequency,
-		horizontalFrequency,
-		0.3,
-		0.0,
-		steps,
-		interval
-	);
-});
+//Animate
+animate();
 
-/**
- *
- * @param {number} vfq  Base vertical Frequency
- * @param {number} hfq  Base horizontal Frequency
- * @param {number} vfqInc vertical feq increase
- * @param {number} hfqInc horizontal feq increase
- * @param {number} steps animation steps
- * @param {number} interval time interval in milliseconds
- */
-function animatePerlNoise(vfq, hfq, vfqInc, hfqInc, steps, interval) {
-	for (i = 0; i < steps; i++) {
-		setTimeout(() => {
-			vfq += vfqInc;
-			hfq += hfqInc;
-			turbulence.setAttribute('baseFrequency', `${vfq} ${hfq}`);
-		}, i * interval);
-	}
-	setTimeout(() => {
-		vfq = 0;
-		hfq = 0;
-		turbulence.setAttribute('baseFrequency', `${vfq} ${hfq}`);
-	}, steps * interval);
+function animate() {
+	drawFlower();
+	requestAnimationFrame(animate);
+}
+
+function drawFlower() {
+	let angle = number * 2;
+	let radius = scale * Math.sqrt(number);
+	let size = 02;
+	let posY = radius * Math.cos(angle) + canvas.height / 2;
+	let posX = radius * Math.sin(angle) + canvas.width / 2;
+	console.log(angle);
+	ctx.beginPath();
+	ctx.arc(posX, posY, size, 0, Math.PI * 2);
+	ctx.fillStyle = 'red';
+	ctx.strokeStyle = 'white';
+	ctx.lineWidth = 1;
+	ctx.closePath();
+	ctx.fill();
+	ctx.stroke();
+
+	number++;
 }

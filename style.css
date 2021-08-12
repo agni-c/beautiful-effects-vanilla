@@ -2,85 +2,15 @@
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
-	font-family: 'Poppins', sans-serif;
 }
-
-.container {
-	width: 100%;
+body {
 	min-height: 100vh;
-	display: flex;
-	justify-content: space-around;
-	align-items: center;
-	flex-wrap: wrap;
 }
-button {
-	width: 250px;
-	height: 80px;
-	background: none;
-	border: none;
-	outline: none;
-	font-size: 40px;
-	color: white;
-	position: relative;
-}
-
-.liquid::before {
-	content: '';
-	background: rgb(69, 174, 216);
+#fibb-canvas {
+	position: absolute;
 	width: 100%;
 	height: 100%;
-	position: absolute;
-	z-index: -1;
 	top: 0;
 	left: 0;
-}
-
-.distort::before {
-	content: '';
-	background: rgb(91, 185, 47);
-	width: 100%;
-	height: 100%;
-	position: absolute;
-	z-index: -1;
-	top: 0;
-	left: 0;
-}
-.hayware::before {
-	content: '';
 	background: black;
-	width: 100%;
-	height: 100%;
-	position: absolute;
-	z-index: -1;
-	top: 0;
-	left: 0;
-}
-button:hover {
-	animation: squish 0.5s;
-}
-.liquid:hover::before {
-	/* background: linear-gradient(to right, red, green, blue); */
-	filter: url('#wave');
-}
-.distort:hover::before {
-	/* background: linear-gradient(to right, red, green, blue); */
-	filter: url('#wave');
-}
-.hayware:hover::before {
-	/* background: linear-gradient(to right, red, green, blue); */
-	filter: url('#wave');
-}
-@keyframes squish {
-	0% {
-		transform: scale(1);
-	}
-	60% {
-		transform: scale(1.05);
-	}
-	80% {
-		transform: scale(0.96);
-	}
-	100% {
-		transform: scale(1);
-	}
 }
