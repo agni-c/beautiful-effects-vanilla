@@ -7,6 +7,9 @@ const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
+const adjustX = window.innerWidth / 8;
+const adjustY = window.innerHeight / 4;
+
 let particlesArray = [];
 
 window.addEventListener('resize', () => {
@@ -24,13 +27,13 @@ const mouse = {
 window.addEventListener('mousemove', e => {
     mouse.x = e.x;
     mouse.y = e.y;
-    console.log(mouse.x, mouse.y);
+    // console.log(mouse.x, mouse.y);
 });
 
 ctx.fillStyle = 'white';
 ctx.font = '30px Verdana';
-ctx.fillText('AGNIBHA', 0, 30);
-const textCoordinates = ctx.getImageData(0, 0, 200, 100);
+ctx.fillText('BLAZE', 0, 30);
+const textCoordinates = ctx.getImageData(0, 0, 200, 300);
 
 class Particle {
     constructor(x, y) {
@@ -47,10 +50,8 @@ class Particle {
 
         let distance = Math.sqrt(dx * dx + dy * dy);
 
-        // when we combine  2 we get tangent (tan)
-        // if they divide and cancel out we get 1 (tan45) if it is in that position
-        let forceDirectionX = dx / distance; // lombo by oti (sin angle) |_
-        let forceDirectionY = dy / distance; //lombo by oti (sine angle) |_
+        let forceDirectionX = dx / distance;
+        let forceDirectionY = dy / distance;
 
         let maxDistance = mouse.radius;
         let force = (maxDistance - distance) / maxDistance; // the smaller the distance ,slower the obj
@@ -80,12 +81,38 @@ class Particle {
 
 function init() {
     particlesArray = [];
-    for (let i = 0; i < 1000; i++) {
-        let x = Math.random() * canvas.width;
-        let y = Math.random() * canvas.height;
-        particlesArray.push(new Particle(x, y));
+    //scan matrix based on text coordinate width and height
+    for (let y = 0, y2 = textCoordinates.height; y < y2; y++) {
+        for (let x = 0, x2 = textCoordinates.height; x < x2; x++) {
+            let imageOpacityCoordinates = y * 4 * textCoordinates.width + x * 4 + 3;
+            if (textCoordinates.data[imageOpacityCoordinates] > 128) {
+                let positionX = x * 10 + adjustX;
+                let positionY = y * 10 + adjustY;
+                particlesArray.push(new Particle(positionX, positionY));
+            }
+        }
     }
     animate();
+}
+
+function connect() {
+    for (let a = 0; a < particlesArray.length; a++) {
+        for (let b = a; b < particlesArray.length; b++) {
+            let dx = particlesArray[a].x - particlesArray[b].x;
+            let dy = particlesArray[a].y - particlesArray[b].y;
+            let distance = Math.sqrt(dx * dx + dy * dy);
+            // console.log(particlesArray[a].x);
+
+            if (distance < 20) {
+                ctx.strokeStyle = 'white';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+                ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                ctx.stroke();
+            }
+        }
+    }
 }
 
 function animate() {
@@ -95,9 +122,12 @@ function animate() {
         particlesArray[i].draw();
         particlesArray[i].update();
     }
-
+    connect();
     requestAnimationFrame(animate);
 }
 init();
 
-console.log({ particlesArray });
+console.log({ textCoordinates });
+
+// TODO : dynamically change line colors
+// TODO : dynamically change particle color inside the mouse radius
