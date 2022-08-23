@@ -32,7 +32,7 @@ window.addEventListener('mousemove', e => {
 
 ctx.fillStyle = 'white';
 ctx.font = '30px Verdana';
-ctx.fillText('BLAZE', 0, 30);
+ctx.fillText('AGNIBHA', 0, 30); // change your name here
 const textCoordinates = ctx.getImageData(0, 0, 200, 300);
 
 class Particle {
